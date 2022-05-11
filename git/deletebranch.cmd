@@ -12,7 +12,7 @@ REM - Your repo has a remote at "origin"
 setlocal enabledelayedexpansion
 
 if "%~1"=="" (
-  echo Specify branch(es) to delete
+  echo "Specify branch(es) to delete"
   exit /b 1
 )
 
