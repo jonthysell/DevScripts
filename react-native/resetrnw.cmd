@@ -44,14 +44,6 @@ echo resetrnw.cmd: Resetting RNW to branch "%branch%"
 
 pushd %RNW_ROOT%
 
-echo resetrnw.cmd: Changing to branch "%branch%"
-call syncupstream.cmd %branch%
-
-if %ERRORLEVEL% neq 0 (
-  echo resetrnw.cmd: Unable to change to branch "%branch%"
-  exit /b %ERRORLEVEL%
-)
-
 if "%cleanbins%"=="1" (
   echo resetrnw.cmd: Cleaning bins
   call cleanbins.cmd
@@ -72,6 +64,14 @@ if "%cleannode%"=="1" (
   )
 )
 
+echo resetrnw.cmd: Changing to branch "%branch%"
+call syncupstream.cmd %branch%
+
+if %ERRORLEVEL% neq 0 (
+  echo resetrnw.cmd: Unable to change to branch "%branch%"
+  exit /b %ERRORLEVEL%
+)
+
 echo resetrnw.cmd: Running yarn install
 call yarn install
 
@@ -88,7 +88,7 @@ if %ERRORLEVEL% neq 0 (
   exit /b %ERRORLEVEL%
 )
 
-git status
+call git status
 
 echo resetrnw.cmd: Successfully reset RNW to branch "%branch%"
 

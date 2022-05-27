@@ -44,14 +44,6 @@ echo resetrn.cmd: Resetting RN to branch "%branch%"
 
 pushd %RN_ROOT%
 
-echo resetrn.cmd: Changing to branch "%branch%"
-call syncupstream.cmd %branch%
-
-if %ERRORLEVEL% neq 0 (
-  echo resetrn.cmd: Unable to change to branch "%branch%"
-  exit /b %ERRORLEVEL%
-)
-
 if "%cleanbins%"=="1" (
   echo resetrn.cmd: Cleaning bins
   call cleanbins.cmd
@@ -72,6 +64,14 @@ if "%cleannode%"=="1" (
   )
 )
 
+echo resetrn.cmd: Changing to branch "%branch%"
+call syncupstream.cmd %branch%
+
+if %ERRORLEVEL% neq 0 (
+  echo resetrn.cmd: Unable to change to branch "%branch%"
+  exit /b %ERRORLEVEL%
+)
+
 echo resetrn.cmd: Running yarn install
 call yarn install
 
@@ -80,7 +80,7 @@ if %ERRORLEVEL% neq 0 (
   exit /b %ERRORLEVEL%
 )
 
-git status
+call git status
 
 echo resetrn.cmd: Successfully reset RN to branch "%branch%"
 
