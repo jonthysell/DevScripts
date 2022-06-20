@@ -26,17 +26,20 @@ set cleannode=0
 set branch=main
 
 :loop
-
-if not "%1"=="" (
-    if "%1"=="/cleanbins" (
-        set cleanbins=1
-    ) else if "%1"=="/cleannode" (
-        set cleannode=1
-    ) else (
-        set branch=%1
-    )
-    shift
-    goto :loop
+set part=%1
+if not "%part%"=="" (
+  if "%part%"=="/cleanbins" (
+      set cleanbins=1
+  ) else if "%part%"=="/cleannode" (
+      set cleannode=1
+  ) else if "%part:~0,1%"=="/" (
+      echo resetrnw.cmd: Unknown flag "%part%"
+      exit /b 1
+  ) else (
+      set branch=%part%
+  )
+  shift
+  goto :loop
 )
 :loopend
 
