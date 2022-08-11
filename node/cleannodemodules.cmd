@@ -4,7 +4,7 @@ REM Recursively deletes all node_modules folders under the current path
 
 setlocal enabledelayedexpansion
 
-FOR /d /r . %%d in (node_modules) DO @IF EXIST "%%d" echo %%d && rd /s /q %%d
+for /d /r . %%d in (node_modules) do @if exist "%%d" echo %%d && rd /s /q %%d
 
 endlocal
 

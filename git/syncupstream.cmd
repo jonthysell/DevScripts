@@ -11,16 +11,22 @@ REM - Your fork is at the remote "origin" and the upstream repo is at the remote
 
 setlocal enabledelayedexpansion
 
+call where /q git
+if %ERRORLEVEL% neq 0 (
+    @echo %~nx0: git could not be found
+    exit /b %ERRORLEVEL%
+)
+
 if "%~1"=="" (
-  echo syncupstream.cmd: Branch not specified
+  @echo %~nx0: Branch not specified
   exit /b 1
 )
 set branch=%~1
 
-git fetch --recurse-submodules upstream && git checkout --force %branch% && git merge upstream/%branch% && git push -u origin %branch%
+call git fetch --recurse-submodules upstream && git checkout --force %branch% && git merge upstream/%branch% && git push -u origin %branch%
 
 if %ERRORLEVEL% neq 0 (
-  echo syncupstream.cmd: Unable to sync branch "%branch%" to "upstream/%branch%"
+  @echo %~nx0: Unable to sync branch "%branch%" to "upstream/%branch%"
 )
 
 endlocal

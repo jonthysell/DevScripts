@@ -9,6 +9,12 @@ REM /recursive  Recursively clean each subfolders of the given path
 
 setlocal enabledelayedexpansion
 
+call where /q git
+if %ERRORLEVEL% neq 0 (
+    @echo %~nx0: git could not be found
+    exit /b %ERRORLEVEL%
+)
+
 set recursive=0
 
 set target_path=%CD%
@@ -19,7 +25,7 @@ if not "%part%"=="" (
   if "%part%"=="/recursive" (
       set recursive=1
   ) else if "%part:~0,1%"=="/" (
-      echo cleanbins.cmd: Unknown flag "%part%"
+      @echo %~nx0: Unknown flag "%part%"
       exit /b 1
   ) else (
       set target_path=%part%
@@ -42,18 +48,18 @@ if "%recursive%"=="0" (
 )
 
 popd
-goto :exit
+goto :end
 
 :clean
 if not exist ".git/" (
-  @echo cleanbins.cmd: Path "%cd%" is not a git repo
+  @echo %~nx0: Path "%cd%" is not a git repo
 ) else (
-  @echo cleanbins.cmd: Cleaning "%cd%"
+  @echo %~nx0: Cleaning "%cd%"
   call git clean -f -d -e node_modules/ -e *.pfx -e Package.StoreAssociation.xml -x
 )
 exit /b %ERRORLEVEL%
 
-:exit
+:end
 
 endlocal
 

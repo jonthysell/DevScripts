@@ -11,17 +11,23 @@ REM - Your repo has a remote at "origin"
 
 setlocal enabledelayedexpansion
 
+call where /q git
+if %ERRORLEVEL% neq 0 (
+    @echo %~nx0: git could not be found
+    exit /b %ERRORLEVEL%
+)
+
 if "%~1"=="" (
-  echo "Specify branch(es) to delete"
+  @echo %~nx0: Specify branch^(es^) to delete
   exit /b 1
 )
 
 :delete
-if "%~1"=="" goto end
+if "%~1"=="" goto :end
 set branch=%~1
 git branch -D %branch% && git branch -dr origin/%branch%
 shift
-goto delete
+goto :delete
 
 :end
 endlocal
