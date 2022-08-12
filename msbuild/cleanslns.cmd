@@ -10,7 +10,7 @@ setlocal enabledelayedexpansion
 
 call where /q msbuild
 if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: msbuild could not be found
+    @echo cleanslns.cmd: msbuild could not be found
     exit /b %ERRORLEVEL%
 )
 
@@ -20,7 +20,7 @@ set target_path=%CD%
 set part=%1
 if not "%part%"=="" (
   if "%part:~0,1%"=="/" (
-      @echo %~nx0: Unknown flag "%part%"
+      @echo cleanslns.cmd: Unknown flag "%part%"
       exit /b 1
   ) else (
       set target_path=%part%
@@ -33,7 +33,7 @@ if not "%part%"=="" (
 pushd %target_path%
 
 for /r %%i in (*.sln) do (
-    @echo %~nx0: Cleaning "%%i"
+    @echo cleanslns.cmd: Cleaning "%%i"
   call msbuild "%%i" /t:Clean
 )
 

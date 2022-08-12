@@ -11,7 +11,7 @@ setlocal enabledelayedexpansion
 
 call where /q git
 if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: git could not be found
+    @echo cleanbins.cmd: git could not be found
     exit /b %ERRORLEVEL%
 )
 
@@ -25,7 +25,7 @@ if not "%part%"=="" (
   if "%part%"=="/recursive" (
       set recursive=1
   ) else if "%part:~0,1%"=="/" (
-      @echo %~nx0: Unknown flag "%part%"
+      @echo cleanbins.cmd: Unknown flag "%part%"
       exit /b 1
   ) else (
       set target_path=%part%
@@ -52,9 +52,9 @@ goto :end
 
 :clean
 if not exist ".git/" (
-  @echo %~nx0: Path "%cd%" is not a git repo
+  @echo cleanbins.cmd: Path "%cd%" is not a git repo
 ) else (
-  @echo %~nx0: Cleaning "%cd%"
+  @echo cleanbins.cmd: Cleaning "%cd%"
   call git clean -f -d -e node_modules/ -e *.pfx -e Package.StoreAssociation.xml -x
 )
 exit /b %ERRORLEVEL%

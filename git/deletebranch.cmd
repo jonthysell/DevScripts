@@ -13,12 +13,12 @@ setlocal enabledelayedexpansion
 
 call where /q git
 if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: git could not be found
+    @echo deletebranch.cmd: git could not be found
     exit /b %ERRORLEVEL%
 )
 
 if "%~1"=="" (
-  @echo %~nx0: Specify branch^(es^) to delete
+  @echo deletebranch.cmd: Specify branch^(es^) to delete
   exit /b 1
 )
 

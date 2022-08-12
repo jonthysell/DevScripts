@@ -13,12 +13,12 @@ setlocal enabledelayedexpansion
 
 call where /q git
 if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: git could not be found
+    @echo syncupstream.cmd: git could not be found
     exit /b %ERRORLEVEL%
 )
 
 if "%~1"=="" (
-  @echo %~nx0: Branch not specified
+  @echo syncupstream.cmd: Branch not specified
   exit /b 1
 )
 set branch=%~1
@@ -26,7 +26,7 @@ set branch=%~1
 call git fetch --recurse-submodules upstream && git checkout --force %branch% && git merge upstream/%branch% && git push -u origin %branch%
 
 if %ERRORLEVEL% neq 0 (
-  @echo %~nx0: Unable to sync branch "%branch%" to "upstream/%branch%"
+  @echo syncupstream.cmd: Unable to sync branch "%branch%" to "upstream/%branch%"
 )
 
 endlocal

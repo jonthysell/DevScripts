@@ -6,7 +6,7 @@ setlocal
 
 call where /q git
 if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: git could not be found
+    @echo gdiff.cmd: git could not be found
     exit /b %ERRORLEVEL%
 )
 

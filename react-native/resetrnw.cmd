@@ -16,7 +16,7 @@ REM - Your fork is at the remote "origin" and the official repo is at the remote
 setlocal enableextensions enabledelayedexpansion
 
 if "%RNW_ROOT%"=="" (
-  @echo %~nx0: RNW_ROOT environment variable must be set
+  @echo resetrnw.cmd: RNW_ROOT environment variable must be set
   exit /b 1
 )
 
@@ -33,7 +33,7 @@ if not "%part%"=="" (
   ) else if "%part%"=="/cleannode" (
       set cleannode=1
   ) else if "%part:~0,1%"=="/" (
-      @echo %~nx0: Unknown flag "%part%"
+      @echo resetrnw.cmd: Unknown flag "%part%"
       exit /b 1
   ) else (
       set branch=%part%
@@ -43,57 +43,57 @@ if not "%part%"=="" (
 )
 :loopend
 
-@echo %~nx0: Resetting RNW to branch "%branch%"
+@echo resetrnw.cmd: Resetting RNW to branch "%branch%"
 
 pushd %RNW_ROOT%
 
 if "%cleanbins%"=="1" (
-  @echo %~nx0: Cleaning bins
+  @echo resetrnw.cmd: Cleaning bins
   call cleanbins.cmd
   
   if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: Unable to clean bins
+    @echo resetrnw.cmd: Unable to clean bins
     exit /b %ERRORLEVEL%
   )
 )
 
 if "%cleannode%"=="1" (
-  @echo %~nx0: Cleaning node_modules
+  @echo resetrnw.cmd: Cleaning node_modules
   call cleannodemodules.cmd
   
   if %ERRORLEVEL% neq 0 (
-    @echo %~nx0: Unable to clean node_modules
+    @echo resetrnw.cmd: Unable to clean node_modules
     exit /b %ERRORLEVEL%
   )
 )
 
-@echo %~nx0: Changing to branch "%branch%"
+@echo resetrnw.cmd: Changing to branch "%branch%"
 call syncupstream.cmd %branch%
 
 if %ERRORLEVEL% neq 0 (
-  @echo %~nx0: Unable to change to branch "%branch%"
+  @echo resetrnw.cmd: Unable to change to branch "%branch%"
   exit /b %ERRORLEVEL%
 )
 
-@echo %~nx0: Running yarn install
+@echo resetrnw.cmd: Running yarn install
 call yarn install
 
 if %ERRORLEVEL% neq 0 (
-  @echo %~nx0: Failure running yarn install
+  @echo resetrnw.cmd: Failure running yarn install
   exit /b %ERRORLEVEL%
 )
 
-@echo %~nx0: Running yarn build
+@echo resetrnw.cmd: Running yarn build
 call yarn build
 
 if %ERRORLEVEL% neq 0 (
-  @echo %~nx0: Failure running yarn build
+  @echo resetrnw.cmd: Failure running yarn build
   exit /b %ERRORLEVEL%
 )
 
 call git status
 
-@echo %~nx0: Successfully reset RNW to branch "%branch%"
+@echo resetrnw.cmd: Successfully reset RNW to branch "%branch%"
 
 popd
 
