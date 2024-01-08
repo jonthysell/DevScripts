@@ -8,6 +8,7 @@ REM branch  The name of the branch to sync
 REM
 REM Requirements:
 REM - Your fork is at the remote "origin" and the upstream repo is at the remote "upstream"
+REM - Your fork has set the default checkout remote to "origin"
 
 setlocal enabledelayedexpansion
 
