@@ -44,7 +44,7 @@ if not "%part%"=="" (
       set RNW_VERSION=%param%
       shift
   ) else if "%part%"=="/lt" (
-      set RN_TEMPLATE_TYPE=%param%
+      set RNW_TEMPLATE_TYPE=%param%
       shift
   ) else if "%part:~0,1%"=="/" (
       @echo creaternwapp.cmd: Unknown flag "%part%"
@@ -80,10 +80,6 @@ call yarn install
 if not exist ".git\" call git init .
 call git add .
 call git commit -m "call npx --yes react-native@%RN_VERSION% init %APP_NAME% --template react-native@%RN_VERSION%"
-
-@echo creaternwapp.cmd: Upgrading RN
-call yarn upgrade react@%R_VERSION%
-call yarn upgrade react-native@%RN_VERSION%
 
 @echo creaternwapp.cmd: Adding RNW dependency to app
 call yarn add react-native-windows@%RNW_VERSION%
