@@ -24,9 +24,9 @@ if "%RNW_ROOT%"=="" (
 set APP_NAME=testapp
 set RNW_TEMPLATE_TYPE=cpp-app
 
-set R_VERSION=latest
-set RN_VERSION=latest
-set RNW_VERSION=latest
+set R_VERSION=
+set RN_VERSION=
+set RNW_VERSION=
 set LINK_RNW=0
 
 :loop
@@ -62,6 +62,18 @@ if %LINK_RNW% equ 1 (
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react') do @set R_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react-native') do @set RN_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" version') do @set RNW_VERSION=%%a
+)
+
+if "%RNW_VERSION%"=="" (
+  set RNW_VERSION=latest
+)
+
+if "%RN_VERSION%"=="" (
+  for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react-native') do @set RN_VERSION=%%a
+)
+
+if "%R_VERSION%"=="" (
+  for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react') do @set R_VERSION=%%a
 )
 
 @echo creaternwapp.cmd Creating RNW app "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
