@@ -59,22 +59,31 @@ if not "%part%"=="" (
 :loopend
 
 if %LINK_RNW% equ 1 (
+  @echo creaternwapp.cmd Determining versions from local RNW repo at %RNW_ROOT%
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react') do @set R_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react-native') do @set RN_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" version') do @set RNW_VERSION=%%a
 )
 
 if "%RNW_VERSION%"=="" (
+  @echo creaternwapp.cmd Defaulting react-native-windows version to latest
   set RNW_VERSION=latest
 )
 
 if "%RN_VERSION%"=="" (
+  @echo creaternwapp.cmd Determining react-native version from react-native-windows dependency
   for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react-native') do @set RN_VERSION=%%a
 )
 
 if "%R_VERSION%"=="" (
+  @echo creaternwapp.cmd Determining react version from react-native-windows dependency
   for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react') do @set R_VERSION=%%a
 )
+
+@echo creaternwapp.cmd Determining concrete versions for react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION% 
+for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% version') do @set RNW_VERSION=%%a
+for /f "delims=" %%a in ('npm show react-native@%RN_VERSION% version') do @set RN_VERSION=%%a
+for /f "delims=" %%a in ('npm show react@%R_VERSION% version') do @set R_VERSION=%%a
 
 @echo creaternwapp.cmd Creating RNW app "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
 
@@ -114,7 +123,7 @@ call git commit -m "add rnw dependency"
 @echo creaternwapp.cmd Running init-windows with: yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
 call yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
 
-@echo creaternwapp.cmd Done, see new project in %APP_NAME%
+@echo creaternwapp.cmd Done, see new %RNW_TEMPLATE_TYPE% project in "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
 
 endlocal
 
