@@ -123,7 +123,9 @@ call git commit -m "add rnw dependency"
 @echo creaternwapp.cmd Running init-windows with: yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
 call yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
 
-@echo creaternwapp.cmd Done, see new %RNW_TEMPLATE_TYPE% project in "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
+@echo creaternwapp.cmd Done, see new %RNW_TEMPLATE_TYPE% project in %CD% with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
+
+popd
 
 endlocal
 
