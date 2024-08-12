@@ -97,7 +97,7 @@ if %ERRORLEVEL% neq 0 (
   exit /b %ERRORLEVEL%
 )
 
-pushd %LIB_NAME%
+pushd "%LIB_NAME%"
 call yarn install
 
 @echo creaternwlib.cmd Adding RNW dependency to library

@@ -95,7 +95,7 @@ if %ERRORLEVEL% neq 0 (
   exit /b %ERRORLEVEL%
 )
 
-pushd %APP_NAME%
+pushd "%APP_NAME%"
 call yarn install
 
 @echo creaternwapp.cmd: Creating commit to save current state
