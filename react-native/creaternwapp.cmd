@@ -87,8 +87,8 @@ for /f "delims=" %%a in ('npm show react@%R_VERSION% version') do @set R_VERSION
 
 @echo creaternwapp.cmd Creating RNW app "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
 
-@echo creaternwapp.cmd: Creating base RN app project with: npx --yes react-native@%RN_VERSION% init %APP_NAME% --template react-native@%RN_VERSION%
-call npx --yes react-native@%RN_VERSION% init %APP_NAME% --template react-native@%RN_VERSION%
+@echo creaternwapp.cmd: Creating base RN app project with: npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%
+call npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%
 
 if %ERRORLEVEL% neq 0 (
   @echo creaternwapp.cmd: Unable to create base RN app project
@@ -101,17 +101,21 @@ call yarn install
 @echo creaternwapp.cmd: Creating commit to save current state
 if not exist ".git\" call git init .
 call git add .
-call git commit -m "call npx --yes react-native@%RN_VERSION% init %APP_NAME% --template react-native@%RN_VERSION%"
+call git commit -m "npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%"
 
 @echo creaternwapp.cmd: Adding RNW dependency to app
 call yarn add react-native-windows@%RNW_VERSION%
 
 if %LINK_RNW% equ 1 (
   @echo creaternwapp.cmd: Linking RNW dependency to local repo
-  pushd %RNW_ROOT%\vnext
-  call yarn link
-  popd
-  call yarn link react-native-windows
+  if exist ".yarnrc" (
+    call yarn link %RNW_ROOT%\vnext
+  ) else (
+    pushd %RNW_ROOT%\vnext
+    call yarn link
+    popd
+    call yarn link react-native-windows
+  )
 )
 
 call yarn install
@@ -120,8 +124,8 @@ call yarn install
 call git add .
 call git commit -m "add rnw dependency"
 
-@echo creaternwapp.cmd Running init-windows with: yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
-call yarn react-native init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
+@echo creaternwapp.cmd Running init-windows with: npx --yes @react-native-community/cli@latest init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
+call npx --yes @react-native-community/cli@latest init-windows --template %RNW_TEMPLATE_TYPE% --overwrite --logging
 
 @echo creaternwapp.cmd Done, see new %RNW_TEMPLATE_TYPE% project in %CD% with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
 
