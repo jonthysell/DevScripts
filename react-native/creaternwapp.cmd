@@ -108,7 +108,7 @@ call yarn add react-native-windows@%RNW_VERSION%
 
 if %LINK_RNW% equ 1 (
   @echo creaternwapp.cmd: Linking RNW dependency to local repo
-  if exist ".yarnrc" (
+  if exist ".yarnrc.yml" (
     call yarn link %RNW_ROOT%\vnext
   ) else (
     pushd %RNW_ROOT%\vnext
