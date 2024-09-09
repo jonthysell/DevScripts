@@ -24,10 +24,22 @@ if "%~1"=="" (
 )
 set branch=%~1
 
-call git fetch --recurse-submodules upstream && git checkout --force %branch% && git merge upstream/%branch% && git push -u origin %branch%
+call git fetch --recurse-submodules origin
+if %ERRORLEVEL% neq 0 (
+  @echo syncupstream.cmd: Unable to fetch origin
+  exit /b %ERRORLEVEL%
+)
 
+call git fetch --recurse-submodules upstream
+if %ERRORLEVEL% neq 0 (
+  @echo syncupstream.cmd: Unable to fetch upstream
+  exit /b %ERRORLEVEL%
+)
+
+call git checkout --force %branch% && git merge upstream/%branch% && git push -u origin %branch%
 if %ERRORLEVEL% neq 0 (
   @echo syncupstream.cmd: Unable to sync branch "%branch%" to "upstream/%branch%"
+  exit /b %ERRORLEVEL%
 )
 
 endlocal
