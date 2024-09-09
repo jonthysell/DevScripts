@@ -87,8 +87,8 @@ for /f "delims=" %%a in ('npm show react@%R_VERSION% version') do @set R_VERSION
 
 @echo creaternwapp.cmd Creating RNW app "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
 
-@echo creaternwapp.cmd: Creating base RN app project with: npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%
-call npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%
+@echo creaternwapp.cmd: Creating base RN app project with: npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION% --verbose --skip-install --install-pods false --skip-git-init true
+call npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION% --verbose --skip-install --install-pods false --skip-git-init true
 
 if %ERRORLEVEL% neq 0 (
   @echo creaternwapp.cmd: Unable to create base RN app project
@@ -101,7 +101,7 @@ call yarn install
 @echo creaternwapp.cmd: Creating commit to save current state
 if not exist ".git\" call git init .
 call git add .
-call git commit -m "npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION%"
+call git commit -m "npx --yes @react-native-community/cli@latest init %APP_NAME% --version %RN_VERSION% --verbose --skip-install --install-pods false --skip-git-init true"
 
 @echo creaternwapp.cmd: Adding RNW dependency to app
 call yarn add react-native-windows@%RNW_VERSION%
