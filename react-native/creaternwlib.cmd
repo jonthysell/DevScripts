@@ -22,7 +22,7 @@ if "%RNW_ROOT%"=="" (
 )
 
 set LIB_NAME=testlib
-set RN_TEMPLATE_TYPE=module-mixed
+set RN_TEMPLATE_TYPE=module-new
 set RNW_TEMPLATE_TYPE=cpp-lib
 
 set R_VERSION=
@@ -98,6 +98,15 @@ if %ERRORLEVEL% neq 0 (
 )
 
 pushd "%LIB_NAME%"
+
+if not "x%RN_VERSION:nightly=%"=="x%RN_VERSION%" (
+  @echo creaternwlib.cmd Fixing react-native nightly issue
+  pwsh -Command "(gc package.json) -replace \"nightly\", \"%RN_VERSION%\" | Out-File -encoding utf8NoBOM package.json"
+  pushd example
+  pwsh -Command "(gc package.json) -replace \"nightly\", \"%RN_VERSION%\" | Out-File -encoding utf8NoBOM package.json"
+  popd
+)
+
 call yarn install
 
 @echo creaternwlib.cmd Adding RNW dependency to library
