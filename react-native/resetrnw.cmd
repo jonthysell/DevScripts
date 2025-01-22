@@ -76,7 +76,7 @@ if %ERRORLEVEL% neq 0 (
 )
 
 @echo resetrnw.cmd: Running yarn install
-call yarn install
+call yarn install --ignore-scripts
 
 if %ERRORLEVEL% neq 0 (
   @echo resetrnw.cmd: Failure running yarn install
@@ -84,7 +84,7 @@ if %ERRORLEVEL% neq 0 (
 )
 
 @echo resetrnw.cmd: Running yarn build
-call yarn build
+call yarn build --no-cache
 
 if %ERRORLEVEL% neq 0 (
   @echo resetrnw.cmd: Failure running yarn build
