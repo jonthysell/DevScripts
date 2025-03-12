@@ -99,7 +99,7 @@ pushd "%APP_NAME%"
 
 if not "x%RN_VERSION:nightly=%"=="x%RN_VERSION%" (
   @echo creaternwapp.cmd Fixing react-native nightly issue
-  pwsh -Command "(gc package.json) -replace \"nightly\", \"&%RN_VERSION%\" | Out-File -encoding utf8NoBOM package.json"
+  pwsh.exe -Command "(gc package.json) -replace '`u{22}nightly`u{22}', '`u{22}&%RN_VERSION%`u{22}' | Out-File -encoding utf8NoBOM package.json"
 )
 
 call yarn install
