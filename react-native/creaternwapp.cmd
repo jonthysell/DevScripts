@@ -27,6 +27,7 @@ set RNW_TEMPLATE_TYPE=cpp-app
 set R_VERSION=
 set RN_VERSION=
 set RNW_VERSION=
+set RNCLI_VERSION=
 set LINK_RNW=0
 
 :loop
@@ -63,6 +64,7 @@ if %LINK_RNW% equ 1 (
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react') do @set R_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" peerDependencies.react-native') do @set RN_VERSION=%%a
   for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" version') do @set RNW_VERSION=%%a
+  for /f "delims=" %%a in ('npm show "%RNW_ROOT%\vnext" dependencies.@react-native-community/cli') do @set RNCLI_VERSION=%%a
 )
 
 if "%RNW_VERSION%"=="" (
@@ -75,14 +77,20 @@ if "%RN_VERSION%"=="" (
   for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react-native') do @set RN_VERSION=%%a
 )
 
+if "%RNCLI_VERSION%"=="" (
+  @echo creaternwapp.cmd Determining @react-native-community/cli version from react-native-windows dependency
+  for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% dependencies.@react-native-community/cli') do @set RNCLI_VERSION=%%a
+)
+
 if "%R_VERSION%"=="" (
   @echo creaternwapp.cmd Determining react version from react-native-windows dependency
   for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% peerDependencies.react') do @set R_VERSION=%%a
 )
 
-@echo creaternwapp.cmd Determining concrete versions for react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION% 
+@echo creaternwapp.cmd Determining concrete versions for react@%R_VERSION%, react-native@%RN_VERSION%, @react-native-community/cli@%RNCLI_VERSION%, and react-native-windows@%RNW_VERSION% 
 for /f "delims=" %%a in ('npm show react-native-windows@%RNW_VERSION% version') do @set RNW_VERSION=%%a
 for /f "delims=" %%a in ('npm show react-native@%RN_VERSION% version') do @set RN_VERSION=%%a
+for /f "delims=" %%a in ('npm show @react-native-community/cli@%RNCLI_VERSION% version') do @set RNCLI_VERSION=%%a
 for /f "delims=" %%a in ('npm show react@%R_VERSION% version') do @set R_VERSION=%%a
 
 @echo creaternwapp.cmd Creating RNW app "%APP_NAME%" with react@%R_VERSION%, react-native@%RN_VERSION%, and react-native-windows@%RNW_VERSION%
@@ -98,8 +106,11 @@ if %ERRORLEVEL% neq 0 (
 pushd "%APP_NAME%"
 
 if not "x%RN_VERSION:nightly=%"=="x%RN_VERSION%" (
-  @echo creaternwapp.cmd Fixing react-native nightly issue
+  @echo creaternwapp.cmd Fixing react-native nightly issues
   pwsh.exe -Command "(gc package.json) -replace '""nightly""', '""%RN_VERSION%""' | Out-File -encoding utf8NoBOM package.json"
+  pwsh.exe -Command "(gc package.json) -replace '""@react-native-community/cli"": "".*""', '""@react-native-community/cli"": ""%RNCLI_VERSION%""' | Out-File -encoding utf8NoBOM package.json"
+  pwsh.exe -Command "(gc package.json) -replace '""@react-native-community/cli-platform-android"": "".*""', '""@react-native-community/cli-platform-android"": ""%RNCLI_VERSION%""' | Out-File -encoding utf8NoBOM package.json"
+  pwsh.exe -Command "(gc package.json) -replace '""@react-native-community/cli-platform-ios"": "".*""', '""@react-native-community/cli-platform-ios"": ""%RNCLI_VERSION%""' | Out-File -encoding utf8NoBOM package.json"
 )
 
 call yarn install
